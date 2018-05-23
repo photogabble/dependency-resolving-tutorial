@@ -1,0 +1,29 @@
+{
+    "name": "photogabble/dependency-graph",
+    "description": "Dependency Graph Example",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Simon Dann",
+            "email": "simon.dann@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "6.*|7.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Photogabble\\DependencyGraph\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Photogabble\\Tests\\": "tests"
+        }
+    },
+    "minimum-stability" : "dev"
+}
