@@ -4,27 +4,38 @@ namespace Photogabble\DependencyGraph;
 
 class GraphResolver
 {
-
     /**
      * @var Node[]
      */
     private $resolved = [];
 
     /**
-     * @var array[]
+     * @var Node[]
      */
     private $unresolved = [];
+
+    private $adjacencyList = [];
 
     public function resolve(Node $node): array
     {
         $this->resolved = [];
         $this->unresolved = [];
+        $this->adjacencyList = [];
         $this->resolveNode($node);
         return $this->resolved;
     }
 
-    private function resolveNode(Node $node)
+    public function getAdjacencyList()
     {
+        return $this->adjacencyList;
+    }
+
+    private function resolveNode(Node $node, $parents = [])
+    {
+        if (! isset($this->adjacencyList[$node->name])){
+            $this->adjacencyList[$node->name] = [];
+        }
+
         array_push($this->unresolved, $node);
         foreach ($node->edges as $edge)
         {
@@ -32,7 +43,13 @@ class GraphResolver
                 if (in_array($edge, $this->unresolved)){
                     throw new \Exception('Circular reference detected: ' . $node->name . ' -> '. $edge->name);
                 }
-                $this->resolveNode($edge);
+                array_push($parents, $node);
+                $this->resolveNode($edge, $parents);
+            }
+        }
+        foreach($parents as $p){
+            if ($node->name !== $p->name && !in_array($node, $this->adjacencyList[$p->name])) {
+                array_push($this->adjacencyList[$p->name], $node);
             }
         }
         array_push($this->resolved, $node);

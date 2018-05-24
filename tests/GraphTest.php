@@ -49,7 +49,7 @@ class GraphTest extends \PHPUnit\Framework\TestCase {
         $class->resolve($nodes['a']);
     }
 
-    public function testGraphTrimming()
+    public function testGraphAdjacencyList()
     {
         /** @var Node[] $nodes */
         $nodes = [];
@@ -66,11 +66,19 @@ class GraphTest extends \PHPUnit\Framework\TestCase {
         $nodes['c']->addEdge($nodes['d']); // c depends on d
         $nodes['c']->addEdge($nodes['e']); // c depends on e
 
-        $class = new GraphResolver(true);
-        $result = $class->resolve($nodes['a']);
+        $class = new GraphResolver();
+        $class->resolve($nodes['a']);
 
-        $this->assertSame(['d', 'e', 'c'], array_map(function(Node $v){
-            return $v->name;
-        }, $result));
+        $this->assertSame([
+            'a' => ['d','e','c','b'],
+            'b' => ['d','e','c'],
+            'c' => ['d','e'],
+            'd' => [],
+            'e' => [],
+        ], array_map(function(array $v){
+            return array_map(function(Node $n){
+                return $n->name;
+            }, $v);
+        }, $class->getAdjacencyList()));
     }
 }
