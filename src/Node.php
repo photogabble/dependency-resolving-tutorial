@@ -9,14 +9,17 @@ class Node
      */
     public $name;
 
+    public $changed;
+
     /**
      * @var Node[] Array of edge nodes
      */
     public $edges = [];
 
-    public function __construct(string $name)
+    public function __construct(string $name, bool $changed = false)
     {
         $this->name = $name;
+        $this->changed = $changed;
     }
 
     public function addEdge(Node $node)
