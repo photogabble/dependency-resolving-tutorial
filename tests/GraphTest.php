@@ -57,8 +57,6 @@ class GraphTest extends \PHPUnit\Framework\TestCase {
             $nodes[$letter] = new Node($letter);
         }
 
-        $nodes['c']->changed = true;
-
         $nodes['a']->addEdge($nodes['b']); // a depends on b
         $nodes['a']->addEdge($nodes['d']); // a depends on d
         $nodes['b']->addEdge($nodes['c']); // b depends on c
@@ -80,5 +78,38 @@ class GraphTest extends \PHPUnit\Framework\TestCase {
                 return $n->name;
             }, $v);
         }, $class->getAdjacencyList()));
+    }
+
+    public function testGraphReduction()
+    {
+        /** @var Node[] $nodes */
+        $nodes = [];
+        foreach (range('a', 'e') as $letter) {
+            $nodes[$letter] = new Node($letter);
+        }
+
+        $nodes['c']->changed = true;
+
+        $nodes['a']->addEdge($nodes['b']); // a depends on b
+        $nodes['a']->addEdge($nodes['d']); // a depends on d
+        $nodes['b']->addEdge($nodes['c']); // b depends on c
+        $nodes['b']->addEdge($nodes['e']); // b depends on e
+        $nodes['c']->addEdge($nodes['d']); // c depends on d
+        $nodes['c']->addEdge($nodes['e']); // c depends on e
+
+        $class = new GraphResolver();
+        $class->resolve($nodes['a']);
+
+        $modified = [];
+        $adjacencyList = $class->getAdjacencyList();
+
+        foreach ($nodes as $node){
+            if ($node->changed === true){
+                array_push($modified, $adjacencyList[$node->name]);
+            }
+        }
+
+        var_dump($modified);
+
     }
 }

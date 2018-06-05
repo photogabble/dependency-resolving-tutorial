@@ -16,6 +16,11 @@ class GraphResolver
 
     private $adjacencyList = [];
 
+    /**
+     * @param Node $node
+     * @return array
+     * @throws \Exception
+     */
     public function resolve(Node $node): array
     {
         $this->resolved = [];
@@ -30,6 +35,11 @@ class GraphResolver
         return $this->adjacencyList;
     }
 
+    /**
+     * @param Node $node
+     * @param array $parents
+     * @throws \Exception
+     */
     private function resolveNode(Node $node, $parents = [])
     {
         if (! isset($this->adjacencyList[$node->name])){
