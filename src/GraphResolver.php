@@ -14,6 +14,9 @@ class GraphResolver
      */
     private $unresolved = [];
 
+    /**
+     * @var array
+     */
     private $adjacencyList = [];
 
     /**
@@ -30,6 +33,9 @@ class GraphResolver
         return $this->resolved;
     }
 
+    /**
+     * @return array
+     */
     public function getAdjacencyList()
     {
         return $this->adjacencyList;
