@@ -34,11 +34,36 @@ class GraphResolver
     }
 
     /**
+     * Returns the resolved graph adjacency list.
+     *
      * @return array
      */
-    public function getAdjacencyList()
+    public function getAdjacencyList(): array
     {
         return $this->adjacencyList;
+    }
+
+    /**
+     * Reduces the resolved graph and returns only nodes that have their
+     * changed flag set to true or are connected as dependants to
+     * a node that has its changed flag set to true.
+     *
+     * @return array
+     */
+    public function reduce(): array
+    {
+        $modified = [];
+
+        foreach ($this->resolved as $node){
+            if ($node->changed === true){
+                array_push($modified, $node);
+                foreach ($this->adjacencyList[$node->name] as $affected) {
+                    array_push($modified,$affected);
+                }
+            }
+        }
+
+        return $modified;
     }
 
     /**

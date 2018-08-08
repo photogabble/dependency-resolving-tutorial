@@ -9,6 +9,9 @@ class Node
      */
     public $name;
 
+    /**
+     * @var bool isChanged flag
+     */
     public $changed;
 
     /**
